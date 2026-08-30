@@ -1,109 +1,43 @@
-# MyWallpaper Addon Template
+# MyWallpaper Add-on Template
 
-Template simple pour créer des addons MyWallpaper.
+Starter repository for a public MyWallpaper Canvas add-on. It uses the same
+manifest, settings tree and `mount(context)` contract as the official add-ons.
 
-## 🚀 Utilisation
-
-1. **Fork ce repository**
-2. **Modifiez les fichiers** selon vos besoins
-3. **Testez localement** avec un serveur HTTP
-4. **Publiez sur GitHub** et partagez l'URL
-
-## 📁 Structure
-
-```
-├── addon.json    # Configuration de l'addon
-├── index.html    # Page principale
-├── styles.css    # Styles CSS
-├── script.js     # Logique JavaScript
-└── README.md     # Cette documentation
-```
-
-## ⚙️ Configuration (addon.json)
-
-```json
-{
-  "name": "Mon Premier Addon",
-  "description": "Un addon simple pour MyWallpaper",
-  "version": "1.0.0",
-  "author": {
-    "name": "Votre Nom",
-    "github": "votreusername"
-  },
-  "type": "widget",
-  "category": ["clock"],
-  "settings": {
-    "color": {
-      "type": "color",
-      "label": "Couleur",
-      "default": "#3B82F6"
-    },
-    "size": {
-      "type": "range", 
-      "label": "Taille",
-      "default": 200,
-      "min": 100,
-      "max": 400
-    }
-  }
-}
-```
-
-## 🎨 Personnalisation
-
-### Changer les couleurs
-Modifiez les variables CSS dans `styles.css`:
-```css
-:root {
-  --primary-color: #3B82F6;
-  --widget-size: 200px;
-}
-```
-
-### Ajouter des paramètres
-Ajoutez dans `addon.json`:
-```json
-"settings": {
-  "nouveauParametre": {
-    "type": "boolean",
-    "label": "Nouveau paramètre",
-    "default": true
-  }
-}
-```
-
-## 🧪 Test local
+## Local development
 
 ```bash
-# Servir les fichiers localement
-npx http-server . -p 8080 --cors
-
-# URL de test: http://localhost:8080
+corepack enable pnpm
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-## 📤 Publication
+The local page is only a development preview. The production artifact is
+generated with:
 
-1. Créez un repository GitHub public
-2. Uploadez tous les fichiers
-3. Partagez l'URL GitHub avec les utilisateurs MyWallpaper
-
-## 📝 Types de paramètres
-
-- `color`: Sélecteur de couleur
-- `range`: Curseur avec min/max
-- `boolean`: Case à cocher
-- `string`: Champ texte
-- `select`: Liste déroulante
-
-Exemple avec options:
-```json
-"theme": {
-  "type": "select",
-  "label": "Thème",
-  "default": "modern",
-  "options": [
-    { "label": "Moderne", "value": "modern" },
-    { "label": "Classique", "value": "classic" }
-  ]
-}
+```bash
+pnpm typecheck
+pnpm build
 ```
+
+The build emits `dist/index.html` and `dist/assets/addon.js`. The entry exports
+`mount` and receives an isolated layer root, settings and lifecycle APIs from
+MyWallpaper; it does not use undocumented globals or `postMessage` protocols.
+
+## Settings tree
+
+`manifest.json` demonstrates sections and nested settings through the
+`parent` field. Add settings to the array, choose a section parent, and keep
+the default value in the manifest. `showIf` can hide a dependent control while
+the runtime continues to receive the complete settings object.
+
+## Publication
+
+The repository is intentionally public and contains no credentials. The
+canonical publication workflow is triggered by an immutable `v*` tag and calls
+the pinned MyWallpaper toolchain. Publication validates the exact source,
+manifest, build output, provenance and digest before a release can enter the
+catalogue. Nothing is published from the local preview server.
+
+Copy this repository when starting a new add-on, then update the name,
+description, version, thumbnail in `assets/` and source module. Keep the generated runtime
+declaration in `generated/` synchronized with the toolchain.

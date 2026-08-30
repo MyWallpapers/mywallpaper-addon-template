@@ -1,0 +1,6 @@
+node_modules/
+dist/*
+!dist/index.html
+!dist/assets/
+!dist/assets/addon.js
+.DS_Store
