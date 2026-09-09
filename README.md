@@ -19,7 +19,7 @@ pnpm typecheck
 pnpm build
 ```
 
-The build emits `dist/index.html` and `dist/assets/addon.js`. The entry exports
+The build emits the ESM entry `dist/assets/addon.js` and its assets. The entry exports
 `mount` and receives an isolated layer root, settings and lifecycle APIs from
 MyWallpaper; it does not use undocumented globals or `postMessage` protocols.
 
@@ -30,14 +30,23 @@ MyWallpaper; it does not use undocumented globals or `postMessage` protocols.
 the default value in the manifest. `showIf` can hide a dependent control while
 the runtime continues to receive the complete settings object.
 
-## Publication
+## Publishing
 
-The repository is intentionally public and contains no credentials. The
-canonical publication workflow is triggered by an immutable `v*` tag and calls
-the pinned MyWallpaper toolchain. Publication validates the exact source,
-manifest, build output, provenance and digest before a release can enter the
-catalogue. Nothing is published from the local preview server.
+Merge the source and matching manifest/package version into the reviewed default
+branch, wait for quality checks, then push a new immutable `v<version>` tag.
+Open this add-on's management page in MyWallpaper and select that tag to request
+publication with an active lifetime entitlement.
 
-Copy this repository when starting a new add-on, then update the name,
-description, version, thumbnail in `assets/` and source module. Keep the generated runtime
-declaration in `generated/` synchronized with the toolchain.
+MyWallpaper resolves the exact public repository and commit, dispatches its
+pinned central workflow, rebuilds and verifies the artifacts, and publishes the
+immutable transport from the platform repository. The add-on repository needs
+no publication workflow or MyWallpaper credential. Do not pre-create a GitHub
+release: a source tag alone does not publish the add-on to the catalogue.
+
+Each accepted newer release is available for new installations. Existing
+wallpapers remain pinned to their exact release until explicitly changed.
+
+
+Copy this repository for a new add-on and update its name, description, version,
+thumbnail and source. Keep `generated/mywallpaper-runtime.d.ts` synchronized
+with the canonical CLI.

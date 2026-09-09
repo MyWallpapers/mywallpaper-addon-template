@@ -15,7 +15,7 @@ concurrency:
 jobs:
   quality:
     name: quality
-    runs-on: ubuntu-24.04
+    runs-on: windows-2025
     timeout-minutes: 15
     steps:
       - name: Checkout without persisted credentials
@@ -39,3 +39,21 @@ jobs:
 
       - name: Build the distributable
         run: pnpm build
+
+      - name: Verify the emitted Canvas module
+        run: pnpm test
+
+      - name: Checkout the canonical validator
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          repository: MyWallpapers/native-addon-toolchain
+          ref: 5cb93ac836299df0caff42426da5c80fd8ce7c32
+          path: .toolchain
+          persist-credentials: false
+
+      - name: Validate the complete add-on contract
+        shell: pwsh
+        run: |
+          & .toolchain/.github/scripts/expand-canonical-cli.ps1 -ArtifactRoot .toolchain/.github/canonical-cli -Destination "$env:RUNNER_TEMP/addon-cli"
+          node "$env:RUNNER_TEMP/addon-cli/cli/dist/bin.js" check --json --directory .
+          if ($LASTEXITCODE -ne 0) { throw 'Canonical add-on validation failed' }

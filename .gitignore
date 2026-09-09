@@ -4,3 +4,4 @@ dist/*
 !dist/assets/
 !dist/assets/addon.js
 .DS_Store
+.toolchain/
