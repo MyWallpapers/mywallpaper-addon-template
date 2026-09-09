@@ -1,3 +1,4 @@
+
 const d={primaryColor:"#00ff41",displayText:"MYWALLPAPER TEMPLATE",showMatrixRain:!0,rainOpacity:.7,showClock:!0,showDate:!0},D="アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";function P({layer:o}){const e=o.root;e.classList.add("mwa-template-root");const n=document.createElement("style");n.textContent=`
     .mwa-template-root {
       --mwa-template-color: #00ff41;
